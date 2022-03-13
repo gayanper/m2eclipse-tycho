@@ -1,0 +1,55 @@
+name:  Build and Deploy
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ cloudsmith_io ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9]    
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Build with Maven
+        run: mvn install -DskipTests
+        
+      - name: Setup CLI
+        run: |
+            python -m pip install --upgrade pip
+            pip install --upgrade cloudsmith-cli
+      - name: Clean P2
+        env:
+          CLOUDSMITH_API_KEY: ${{ secrets.PKG_API_KEY }}
+        run: |
+           cloudsmith list packages gap/met -F pretty_json -q "format:p2" | jq -r ".data[].slug_perm" | xargs -I {} cloudsmith delete -y gap/met/{} 
+
+      - name: Upload P2
+        env:
+          CLOUDSMITH_API_KEY: ${{ secrets.PKG_API_KEY }}
+          VERSION: ${{ github.sha }}
+        working-directory: ./org.sonatype.tycho.repository/target/repository/
+        run: |
+          for file in ./plugins/*.jar
+          do
+            cloudsmith push p2 gap/met $file --republish
+          done
+
+          for file in ./features/*.jar
+          do
+            cloudsmith push p2 gap/met $file --republish
+          done
+                
+          
