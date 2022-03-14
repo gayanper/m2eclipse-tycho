@@ -73,6 +73,24 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    <plugins>
+    	<plugin>
+    	 <groupId>org.eclipse.tycho</groupId>
+    	 <artifactId>tycho-p2-repository-plugin</artifactId>
+    	 <executions>
+    	 	<execution>
+    	 		<id>m2-repo</id>
+    	 		<phase>package</phase>
+    	 		<goals>
+    	 			<goal>assemble-maven-repository</goal>
+    	 		</goals>
+    	 		<configuration>
+    	 			<includeDependencies>false</includeDependencies>
+    	 		</configuration>
+    	 	</execution>
+    	 </executions>
+    	</plugin>
+    </plugins>
   </build>
 	<pluginRepositories>
 		<pluginRepository>
