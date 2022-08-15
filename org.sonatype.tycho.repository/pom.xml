@@ -11,5 +11,16 @@
 
   <artifactId>org.sonatype.tycho.repository</artifactId>
   <packaging>eclipse-repository</packaging>
-
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-p2-repository-plugin</artifactId>
+				<version>2.7.0</version>
+				<configuration>
+					<repositoryName>${project.artifactId}</repositoryName>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
