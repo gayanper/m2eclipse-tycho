@@ -40,14 +40,13 @@ jobs:
         env:
           CLOUDSMITH_API_KEY: ${{ secrets.PKG_API_KEY }}
           VERSION: ${{ github.sha }}
-        working-directory: ./org.sonatype.tycho.repository/target/repository/
         run: |
-          for file in ./plugins/*.jar
+          for file in ./org.sonatype.tycho.repository/target/m2eclipse-tycho/plugins/*.jar
           do
             cloudsmith push p2 gap/met $file --republish
           done
 
-          for file in ./features/*.jar
+          for file in ./org.sonatype.tycho.repository/target/m2eclipse-tycho/features/*.jar
           do
             cloudsmith push p2 gap/met $file --republish
           done
