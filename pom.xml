@@ -106,4 +106,14 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
+  <distributionManagement>
+    <snapshotRepository>
+      <id>cloudsmith</id>
+      <url>https://maven.cloudsmith.io/gap/m2tycho/</url>
+    </snapshotRepository>
+    <repository>
+      <id>cloudsmith</id>
+      <url>https://maven.cloudsmith.io/gap/m2tycho/</url>
+    </repository>
+  </distributionManagement>
 </project>
